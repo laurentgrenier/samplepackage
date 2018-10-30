@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: pypiserver-deployment
+  labels:
+    app: pypiserver
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: pypiserver
+    spec:
+      containers:
+      - name: pypiserver-container
+        image: pypiserver/pypiserver:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: pypiserver-port
+        volumeMounts:
+        - mountPath: "/data/packages"
+          name: pypiserver-volume
+      volumes:
+      - name: pypiserver-volume
+        persistentVolumeClaim:
+          claimName: pypiserver-volume-claim
+

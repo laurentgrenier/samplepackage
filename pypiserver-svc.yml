@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pypiserver
+  name: pypiserver-nodeport
+spec:
+  externalTrafficPolicy: Cluster
+  ports:
+  - name: port-pypiserver
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    app: pypiserver
+  sessionAffinity: None
+  type: NodePort
