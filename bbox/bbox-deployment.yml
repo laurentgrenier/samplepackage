@@ -1,0 +1,27 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bbox-deployment
+  labels:
+    app: bbox
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bbox
+    spec:
+      containers:
+      - name: bbox-container
+        image: eu.gcr.io/genuine-grid-218613/bbox:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          name: bbox-port
+        volumeMounts:
+        - mountPath: "/data/packages"
+          name: pypiserver-volume
+      volumes:
+      - name: pypiserver-volume
+        persistentVolumeClaim:
+          claimName: pypiserver-volume-claim
