@@ -7,6 +7,5 @@ ADD             bashrc /root/.bashrc
 ENV             HOME /root
 ENV             ENV $HOME/.bashrc
 
-VOLUME          /data/packages
-
-CMD             ["/bin/sh"]
+# CMD             ["/bin/sh"]
+CMD             exec /bin/sh -c "trap : TERM INT; (while true; do sleep 1000; done) & wait"

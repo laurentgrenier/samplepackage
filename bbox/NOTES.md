@@ -12,9 +12,17 @@ Follow the instructions bellow to build it and push it on your active GCP projec
 ```
 
 ### Execute a shell into the bbox
+The command below create a pod and open a bash prompt on it. 
 ```bash
 kubectl run bbox --image=eu.gcr.io/genuine-grid-218613/bbox:latest -i --tty --rm
 ```
+
+If the pod is already running, just run the command below.
+```bash
+kubectl exec -it $(kubectl get --no-headers=true pods -l run=bbox -o custom-columns=:metadata.name) /bin/bash
+```
+
+
 
 ## The volume
 
@@ -67,3 +75,42 @@ VOLUME          /data/packages
 df -h
 # /dev/sda1                94.3G      2.9G     91.4G   3% /data/packages
 ```
+
+#### emptyDir
+Such a volume is delete when the pod is delete. So its content is removed.
+
+The box is configured as below:
+```yaml
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: bbox-deployment
+  labels:
+    app: bbox
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: bbox
+    spec:
+      containers:
+      - name: bbox-container
+        image: eu.gcr.io/genuine-grid-218613/bbox:alpha
+        imagePullPolicy: Always
+        securityContext:
+          privileged: true
+        ports:
+        - containerPort: 8080
+          name: bbox-port
+        volumeMounts:
+        - name: pypiserver-volume
+          mountPath: "/data/packages"
+          readOnly: false
+      volumes:
+      - name: pypiserver-volume
+        emptyDir: {}
+        
+       
+```
+

@@ -13,15 +13,18 @@ spec:
     spec:
       containers:
       - name: bbox-container
-        image: eu.gcr.io/genuine-grid-218613/bbox:latest
+        image: eu.gcr.io/genuine-grid-218613/bbox:alpha
         imagePullPolicy: Always
+        securityContext:
+          privileged: true
         ports:
         - containerPort: 8080
           name: bbox-port
         volumeMounts:
-        - mountPath: "/data/packages"
-          name: pypiserver-volume
+        - name: testd
+          mountPath: "/data/packages"
+          readOnly: false
       volumes:
-      - name: pypiserver-volume
+      - name: testd
         persistentVolumeClaim:
-          claimName: pypiserver-volume-claim
+          claimName: test-disk

@@ -1,7 +1,7 @@
 # create a bbox with a volume
-docker build -f Dockerfile . -t bbox:latest
+docker build -f Dockerfile . -t bbox:alpha
 
 # tag the bbox
-docker tag bbox eu.gcr.io/genuine-grid-218613/bbox:latest
+docker tag bbox:alpha eu.gcr.io/genuine-grid-218613/bbox:alpha
 
-docker run bbox:latest
+docker run bbox:alpha
